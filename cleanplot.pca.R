@@ -1,4 +1,4 @@
-'cleanplot.pca' <- 
+'cleanplot.pca' = 
 	function(res.pca, ax1=1, ax2=2, scaling=2, plot.sites=TRUE, 
              plot.spe=TRUE, label.sites=TRUE, label.spe=TRUE, cex.char1=0.7,
              pos.sites=2, pos.spe=4, mult.spe=1, select.spe=NULL, 
@@ -98,39 +98,39 @@
 {
 ### Internal functions
 #
-'stretch' <- 
+'stretch' = 
     function(sites, mat, ax1, ax2, n, silent=silent) {
   # Compute stretching factor for the species arrows
   # First, compute the longest distance to centroid for the sites
-  tmp1 <- rbind(c(0,0), sites[,c(ax1,ax2)])
-  D <- dist(tmp1)
-  target <- max(D[1:n])
+  tmp1 = rbind(c(0,0), sites[,c(ax1,ax2)])
+  D = dist(tmp1)
+  target = max(D[1:n])
   # Then, compute the longest distance to centroid for the species arrows
   if(class(mat)[1] == "matrix") {
-    p <- nrow(mat)   # Number of species to be drawn
-    tmp2 <- rbind(c(0,0), mat[,c(ax1,ax2)])
-    D <- dist(tmp2)
-    longest <- max(D[1:p])
-    } else { tmp2 <- rbind(c(0,0), mat[c(ax1,ax2)]) 
-    longest <- dist(tmp2)
+    p = nrow(mat)   # Number of species to be drawn
+    tmp2 = rbind(c(0,0), mat[,c(ax1,ax2)])
+    D = dist(tmp2)
+    longest = max(D[1:p])
+    } else { tmp2 = rbind(c(0,0), mat[c(ax1,ax2)]) 
+    longest = dist(tmp2)
     # print(tmp2)
     }  # If a single row left in 'mat'
   #
   if(!silent) cat("target =",target," longest =",longest," fact =",target/longest,"\n")
-  fact <- target/longest
+  fact = target/longest
 }
 #
-'larger.plot' <- 
+'larger.plot' = 
 	function(sit.sc, spe.sc, percent, move.origin, ax1, ax2) {
   # Internal function to expand plot limits (adapted from code by Pierre Legendre)
-  mat <- rbind(sit.sc, spe.sc)
-  range.mat <- apply(mat, 2, range)
-  rownames(range.mat) <- c("Min","Max")
-  z <- apply(range.mat, 2, function(x) x[2]-x[1])
-  range.mat[1,] <- range.mat[1,]-z*percent
-  range.mat[2,] <- range.mat[2,]+z*percent
-  if(move.origin[1] != 0) range.mat[,ax1] <- range.mat[,ax1] - move.origin[1]
-  if(move.origin[2] != 0) range.mat[,ax2] <- range.mat[,ax2] - move.origin[2]
+  mat = rbind(sit.sc, spe.sc)
+  range.mat = apply(mat, 2, range)
+  rownames(range.mat) = c("Min","Max")
+  z = apply(range.mat, 2, function(x) x[2]-x[1])
+  range.mat[1,] = range.mat[1,]-z*percent
+  range.mat[2,] = range.mat[2,]+z*percent
+  if(move.origin[1] != 0) range.mat[,ax1] = range.mat[,ax1] - move.origin[1]
+  if(move.origin[2] != 0) range.mat[,ax2] = range.mat[,ax2] - move.origin[2]
   range.mat
 }
 ### End internal functions
@@ -138,12 +138,12 @@
   if(!class(res.pca)[1]=="rda") stop("The input file is not a vegan output object of class 'rda'", call.=FALSE)
   if(scaling!=1 & scaling!=2) stop("Function only available for scaling = 1 or 2", call.=FALSE)
 
-	k <- length(res.pca$CA$eig)         # n. of PCA eigenvalues
-	n.sp <- length(res.pca$colsum)      # n. of species
-	ahead <- 0.05   # Length of arrow heads
-	aangle <- 30    # Angle of arrow heads
+	k = length(res.pca$CA$eig)         # n. of PCA eigenvalues
+	n.sp = length(res.pca$colsum)      # n. of species
+	ahead = 0.05   # Length of arrow heads
+	aangle = 30    # Angle of arrow heads
 	# 'vec' will contain the selection of species to be drawn
-    if(is.null(select.spe)){ vec <- 1:n.sp } else { vec <- select.spe }
+    if(is.null(select.spe)){ vec = 1:n.sp } else { vec = select.spe }
 
 # Scaling 1: the species scores have norms of 1
 # Scaling 1: the site scores are scaled to variances = can.eigenvalues
@@ -164,32 +164,32 @@ n = nrow(res.pca$CA$u)           # Number of observations
 Z.sc2 = res.pca$CA$u*sqrt(n-1)   # Site scores, scaling=2
 Z.sc1 = Z.sc2 %*% Lambda^(0.5)   # Site scores, scaling=1
 #
-if(is.null(select.spe)){ vec <- 1:n.sp } else { vec <- select.spe }
+if(is.null(select.spe)){ vec = 1:n.sp } else { vec = select.spe }
 #
 if(scaling==1) {
-  sit.sc <- Z.sc1
-  spe.sc <- U.sc1[vec,]
+  sit.sc = Z.sc1
+  spe.sc = U.sc1[vec,]
 } else {          # For scaling=2
-  sit.sc <- Z.sc2
-  spe.sc <- U.sc2[vec,]
+  sit.sc = Z.sc2
+  spe.sc = U.sc2[vec,]
 }
-if(is.null(rownames(sit.sc))) rownames(sit.sc) <- paste("Site",1:n,sep="")
-if(is.null(rownames(spe.sc))) rownames(spe.sc) <- paste("Sp",1:n.sp,sep="")
+if(is.null(rownames(sit.sc))) rownames(sit.sc) = paste("Site",1:n,sep="")
+if(is.null(rownames(spe.sc))) rownames(spe.sc) = paste("Sp",1:n.sp,sep="")
 #
-fact.spe <- 1
+fact.spe = 1
 if(optimum) {
-  fact.spe <- stretch(sit.sc[,1:k], spe.sc[,1:k], ax1, ax2, n, silent=silent)
+  fact.spe = stretch(sit.sc[,1:k], spe.sc[,1:k], ax1, ax2, n, silent=silent)
 }
 if(!silent) cat("fac.spe =",fact.spe,"\n\n")
-spe.sc <- spe.sc*fact.spe*mult.spe
+spe.sc = spe.sc*fact.spe*mult.spe
 #
-  lim <- larger.plot(sit.sc[,1:k], spe.sc[,1:k], percent=mar.percent, move.origin=move.origin, ax1=ax1, ax2=ax2)
+  lim = larger.plot(sit.sc[,1:k], spe.sc[,1:k], percent=mar.percent, move.origin=move.origin, ax1=ax1, ax2=ax2)
   if(!silent) print(lim)
 
 ### Drawing the biplot begins ###
 ###
   # Draw the main plot
-  mat <- rbind(sit.sc[,1:k], spe.sc[,1:k])
+  mat = rbind(sit.sc[,1:k], spe.sc[,1:k])
   plot(mat[,c(ax1,ax2)], type="n", main=paste("PCA biplot - Scaling", scaling), xlim=c(lim[1,ax1], lim[2,ax1]), ylim=c(lim[1,ax2], lim[2,ax2]), 
     xlab=paste("PCA ",ax1), ylab=paste("PCA ",ax2), asp=1)
   abline(h=0, v=0, col="grey60")
@@ -221,16 +221,16 @@ spe.sc <- spe.sc*fact.spe*mult.spe
   }
 }
 
-  "pcacircle" <- function (pca, mult.spe, fact.spe, silent=silent) 
+  "pcacircle" = function (pca, mult.spe, fact.spe, silent=silent) 
  {
 # Draws a circle of equilibrium contribution on a PCA plot 
 # generated from a vegan analysis.
 
-	eigenv <- pca$CA$eig
-	p <- length(eigenv)
-	n <- nrow(pca$CA$u)
-	tot <- sum(eigenv)
-	radius <- (2/p)^0.5 * mult.spe * fact.spe
+	eigenv = pca$CA$eig
+	p = length(eigenv)
+	n = nrow(pca$CA$u)
+	tot = sum(eigenv)
+	radius = (2/p)^0.5 * mult.spe * fact.spe
 	symbols(0, 0, circles=radius, inches=FALSE, add=TRUE, fg=2)
  if(!silent) cat("\nSpecies arrows and the radius of the equilibrium circle are stretched by a factor of", mult.spe*fact.spe)
  if(!silent) cat("\nThe radius of the equilibrium circle is thus", (2/p)^0.5, "*", mult.spe, "*", fact.spe, "=", radius,"\n")
